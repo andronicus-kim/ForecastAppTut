@@ -1,4 +1,4 @@
-package io.andronicus.forecastmvvm.weather
+package io.andronicus.forecastmvvm.weather.current
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -9,24 +9,24 @@ import android.view.ViewGroup
 
 import io.andronicus.forecastmvvm.R
 
-class FutureListWeatherFragment : Fragment() {
+class CurrentWeatherFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FutureListWeatherFragment()
+        fun newInstance() = CurrentWeatherFragment()
     }
 
-    private lateinit var viewModel: FutureListWeatherViewModel
+    private lateinit var viewModel: CurrentWeatherViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.future_list_weather_fragment, container, false)
+        return inflater.inflate(R.layout.current_weather_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FutureListWeatherViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(CurrentWeatherViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

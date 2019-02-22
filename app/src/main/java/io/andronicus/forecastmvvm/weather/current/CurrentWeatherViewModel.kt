@@ -1,4 +1,4 @@
-package io.andronicus.forecastmvvm.weather
+package io.andronicus.forecastmvvm.weather.current
 
 import androidx.lifecycle.ViewModel;
 

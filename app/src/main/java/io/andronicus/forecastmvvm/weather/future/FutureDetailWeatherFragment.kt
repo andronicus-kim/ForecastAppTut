@@ -1,4 +1,4 @@
-package io.andronicus.forecastmvvm.weather
+package io.andronicus.forecastmvvm.weather.future
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
