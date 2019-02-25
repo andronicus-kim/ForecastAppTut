@@ -10,6 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.threeten.bp.ZonedDateTime
+import java.util.*
 
 class ForecastRepositoryImpl(
     private val currentWeatherDao : CurrentWeatherDao,
@@ -24,6 +26,7 @@ class ForecastRepositoryImpl(
     }
     override suspend fun getCurrentWeather(metric: Boolean): LiveData<out UnitSpecificCurrentWeatherEntry> {
         return withContext(Dispatchers.IO){
+            iniWeatherData()
             return@withContext if (metric) currentWeatherDao.getWeatherMetric()
             else currentWeatherDao.getWeatherImperial()
         }
@@ -33,5 +36,18 @@ class ForecastRepositoryImpl(
         GlobalScope.launch(Dispatchers.IO) {
             currentWeatherDao.upsert(fetchedWeather.currentWeatherEntry)
         }
+    }
+
+    private fun iniWeatherData(){
+
+    }
+
+    private suspend fun fetchCurrentWeather(){
+        weatherNetworkDataSource.fetchCurrentWeather("Nairobi",Locale.getDefault().language)
+    }
+
+    private fun isFetchCurrentNeeded(lastFetchTime : ZonedDateTime) : Boolean{
+        val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
+        return lastFetchTime.isBefore(thirtyMinutesAgo)
     }
 }
