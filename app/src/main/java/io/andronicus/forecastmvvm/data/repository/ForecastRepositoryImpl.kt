@@ -38,8 +38,9 @@ class ForecastRepositoryImpl(
         }
     }
 
-    private fun iniWeatherData(){
-
+    private suspend fun iniWeatherData(){
+        if (isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
+            fetchCurrentWeather()
     }
 
     private suspend fun fetchCurrentWeather(){
