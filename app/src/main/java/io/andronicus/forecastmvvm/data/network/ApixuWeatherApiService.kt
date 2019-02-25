@@ -1,4 +1,4 @@
-package io.andronicus.forecastmvvm.data
+package io.andronicus.forecastmvvm.data.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import io.andronicus.forecastmvvm.data.network.response.CurrentWeatherResponse
@@ -24,7 +24,7 @@ interface ApixuWeatherApiService {
                           @Query("lang") language : String = "en") : Deferred<CurrentWeatherResponse>
 
     companion object {
-        operator fun invoke() : ApixuWeatherApiService{
+        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor) : ApixuWeatherApiService {
             val requestInterceptor = Interceptor{
                 chain -> val url = chain.request().url()
                 .newBuilder()
@@ -39,6 +39,7 @@ interface ApixuWeatherApiService {
             }
             val client = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
+                .addInterceptor(connectivityInterceptor)
                 .build()
             return Retrofit.Builder()
                 .baseUrl(" http://api.apixu.com/v1/")
