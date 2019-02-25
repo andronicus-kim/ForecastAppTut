@@ -1,7 +1,7 @@
 package io.andronicus.forecastmvvm.data
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import io.andronicus.forecastmvvm.data.response.CurrentWeatherResponse
+import io.andronicus.forecastmvvm.data.network.response.CurrentWeatherResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

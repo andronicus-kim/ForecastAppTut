@@ -1,4 +1,4 @@
-package io.andronicus.forecastmvvm.data.response
+package io.andronicus.forecastmvvm.data.network.response
 
 import com.google.gson.annotations.SerializedName
 import io.andronicus.forecastmvvm.data.db.entity.CurrentWeatherEntry
