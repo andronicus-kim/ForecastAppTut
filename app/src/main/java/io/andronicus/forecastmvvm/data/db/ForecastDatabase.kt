@@ -9,7 +9,7 @@ import io.andronicus.forecastmvvm.data.db.entity.CurrentWeatherEntry
 /**
  * Created by Andronicus on 2/25/2019.
  */
-@Database(entities = [CurrentWeatherEntry::class],version = 1)
+@Database(entities = [CurrentWeatherEntry::class],version = 1,exportSchema = false)
 abstract class ForecastDatabase : RoomDatabase() {
 
     abstract fun currentWeatherDao() : CurrentWeatherDao
