@@ -8,5 +8,5 @@ import io.andronicus.forecastmvvm.data.db.unitlocalized.UnitSpecificCurrentWeath
  */
 interface ForecastRepository {
 
-    suspend fun getCurrentWeather(metric : Boolean) : LiveData<UnitSpecificCurrentWeatherEntry>
+    suspend fun getCurrentWeather(metric : Boolean) : LiveData<out UnitSpecificCurrentWeatherEntry>
 }
