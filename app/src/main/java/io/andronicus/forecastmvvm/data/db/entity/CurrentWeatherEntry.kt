@@ -1,7 +1,13 @@
 package io.andronicus.forecastmvvm.data.db.entity
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+
+const val CURRENT_WEATEHR = 0
+@Entity(tableName = "current_weather")
 data class CurrentWeatherEntry(
         @SerializedName("temp_c")
         val tempC: Double,
@@ -9,6 +15,7 @@ data class CurrentWeatherEntry(
         val tempF: Double,
         @SerializedName("is_day")
         val isDay: Int,
+        @Embedded(prefix = "condition_")
         val condition: Condition,
         @SerializedName("wind_mph")
         val windMph: Double,
@@ -29,4 +36,7 @@ data class CurrentWeatherEntry(
         @SerializedName("vis_miles")
         val visMiles: Double,
         val uv: Double
-    )
+    ){
+        @PrimaryKey(autoGenerate = false)
+        var id : Int = CURRENT_WEATEHR
+}
