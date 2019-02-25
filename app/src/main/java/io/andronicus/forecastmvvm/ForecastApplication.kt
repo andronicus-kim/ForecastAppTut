@@ -2,6 +2,9 @@ package io.andronicus.forecastmvvm
 
 import android.app.Application
 import io.andronicus.forecastmvvm.data.db.ForecastDatabase
+import io.andronicus.forecastmvvm.data.network.*
+import io.andronicus.forecastmvvm.data.repository.ForecastRepository
+import io.andronicus.forecastmvvm.data.repository.ForecastRepositoryImpl
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -18,6 +21,10 @@ class ForecastApplication : Application(),KodeinAware {
 
         bind() from singleton { ForecastDatabase(instance()) }
         bind() from singleton { instance<ForecastDatabase>().currentWeatherDao() }
+        bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
+        bind() from singleton { ApixuWeatherApiService(instance()) }
+        bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
+        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
     }
 
 }
