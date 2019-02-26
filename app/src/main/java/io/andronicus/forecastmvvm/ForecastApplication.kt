@@ -7,6 +7,7 @@ import io.andronicus.forecastmvvm.data.network.*
 import io.andronicus.forecastmvvm.data.repository.ForecastRepository
 import io.andronicus.forecastmvvm.data.repository.ForecastRepositoryImpl
 import io.andronicus.forecastmvvm.weather.current.CurrentWeatherViewModel
+import io.andronicus.forecastmvvm.weather.current.CurrentWeatherViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -28,7 +29,7 @@ class ForecastApplication : Application(),KodeinAware {
         bind() from singleton { ApixuWeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
-        bind() from provider { CurrentWeatherViewModel(instance()) }
+        bind() from provider { CurrentWeatherViewModelFactory(instance()) }
     }
 
     override fun onCreate() {
