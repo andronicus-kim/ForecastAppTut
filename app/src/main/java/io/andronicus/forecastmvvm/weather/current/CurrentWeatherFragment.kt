@@ -45,6 +45,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         launch {
         viewModel.weather.await().observe(this@CurrentWeatherFragment,
             Observer {
+                if(it == null) return@Observer
                 text_view.text = it.toString()
             })
         }
