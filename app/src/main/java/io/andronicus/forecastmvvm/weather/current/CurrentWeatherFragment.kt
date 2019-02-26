@@ -39,24 +39,32 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
     private fun bindUI(){
         launch {
-        viewModel.weather.await().observe(this@CurrentWeatherFragment,
-            Observer {
-                if(it == null) return@Observer
+            val currentWeather = viewModel.weather.await()
+            val weatherLocation = viewModel.weatherLocation.await()
 
-                group_loading.visibility = View.GONE
-                updateLocation("Los Angeles")
-                updateDateToToday()
-                updateTemperatures(it.temperature,it.feelsLikeTemperature)
-                updateCondition(it.conditionText)
-                updatePrecipitation(it.precipitationVolume)
-                updateWind(it.windDirection, it.windSpeed)
-                updateVisibility(it.visibilityDistance)
+            weatherLocation.observe(this@CurrentWeatherFragment,
+                Observer {
+                    if(it == null) return@Observer
+                    updateLocation(it.name)
+                })
 
-                GlideApp.with(this@CurrentWeatherFragment)
-                    .load("http:${it.conditionIconUrl}")
-                    .into(imageView_condition_icon)
+            currentWeather.observe(this@CurrentWeatherFragment,
+                Observer {
+                    if(it == null) return@Observer
 
-            })
+                    group_loading.visibility = View.GONE
+                    updateDateToToday()
+                    updateTemperatures(it.temperature,it.feelsLikeTemperature)
+                    updateCondition(it.conditionText)
+                    updatePrecipitation(it.precipitationVolume)
+                    updateWind(it.windDirection, it.windSpeed)
+                    updateVisibility(it.visibilityDistance)
+
+                    GlideApp.with(this@CurrentWeatherFragment)
+                        .load("http:${it.conditionIconUrl}")
+                        .into(imageView_condition_icon)
+
+                })
         }
     }
 

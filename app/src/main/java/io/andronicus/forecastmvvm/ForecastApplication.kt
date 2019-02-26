@@ -5,6 +5,8 @@ import android.preference.PreferenceManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.andronicus.forecastmvvm.data.db.ForecastDatabase
 import io.andronicus.forecastmvvm.data.network.*
+import io.andronicus.forecastmvvm.data.provider.LocationProvider
+import io.andronicus.forecastmvvm.data.provider.LocationProviderImpl
 import io.andronicus.forecastmvvm.data.provider.UnitProvider
 import io.andronicus.forecastmvvm.data.provider.UnitProviderImpl
 import io.andronicus.forecastmvvm.data.repository.ForecastRepository
@@ -28,10 +30,12 @@ class ForecastApplication : Application(),KodeinAware {
 
         bind() from singleton { ForecastDatabase(instance()) }
         bind() from singleton { instance<ForecastDatabase>().currentWeatherDao() }
+        bind() from singleton { instance<ForecastDatabase>().weatherLocationDao() }
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
         bind() from singleton { ApixuWeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
-        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
+        bind<LocationProvider>() with singleton { LocationProviderImpl() }
+        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance(),instance(),instance()) }
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory(instance(),instance()) }
     }

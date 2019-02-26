@@ -8,6 +8,7 @@ import io.andronicus.forecastmvvm.data.db.entity.WeatherLocation
 import io.andronicus.forecastmvvm.data.db.unitlocalized.UnitSpecificCurrentWeatherEntry
 import io.andronicus.forecastmvvm.data.network.WeatherNetworkDataSource
 import io.andronicus.forecastmvvm.data.network.response.CurrentWeatherResponse
+import io.andronicus.forecastmvvm.data.provider.LocationProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,7 +19,8 @@ import java.util.*
 class ForecastRepositoryImpl(
     private val currentWeatherDao : CurrentWeatherDao,
     private val weatherLocationDao: WeatherLocationDao,
-    private val weatherNetworkDataSource : WeatherNetworkDataSource
+    private val weatherNetworkDataSource : WeatherNetworkDataSource,
+    private val locationProvider: LocationProvider
 ) : ForecastRepository {
 
     init {
@@ -51,7 +53,7 @@ class ForecastRepositoryImpl(
     private suspend fun iniWeatherData(){
         val lastWeatherLocation = weatherLocationDao.getLocation().value
 
-        if (lastWeatherLocation == null){
+        if (lastWeatherLocation == null || locationProvider.hasLocationChanged(lastWeatherLocation)){
             fetchCurrentWeather()
             return
         }
