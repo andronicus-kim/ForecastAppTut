@@ -11,6 +11,7 @@ import io.andronicus.forecastmvvm.R
 import io.andronicus.forecastmvvm.data.network.ApixuWeatherApiService
 import io.andronicus.forecastmvvm.data.network.ConnectivityInterceptorImpl
 import io.andronicus.forecastmvvm.data.network.WeatherNetworkDataSourceImpl
+import io.andronicus.forecastmvvm.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,7 +20,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
-class CurrentWeatherFragment : Fragment(), KodeinAware {
+class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
     override val kodein by closestKodein()
 
@@ -37,22 +38,15 @@ class CurrentWeatherFragment : Fragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(CurrentWeatherViewModel::class.java)
-        // TODO: Use the ViewModel
-
-
-        val apiService = ApixuWeatherApiService(ConnectivityInterceptorImpl(this.context!!))
-        val remoteDataSource = WeatherNetworkDataSourceImpl(apiService)
-
-        remoteDataSource.downloadedCurrentWeather.observe(this, Observer {
-            text_view.text = it.toString()
-        })
-
-        GlobalScope.launch(Dispatchers.Main) {
-            remoteDataSource.fetchCurrentWeather("Nairobi","en")
-        }
+        bindUI()
     }
 
     private fun bindUI(){
-
+        launch {
+        viewModel.weather.await().observe(this@CurrentWeatherFragment,
+            Observer {
+                text_view.text = it.toString()
+            })
+        }
     }
 }
