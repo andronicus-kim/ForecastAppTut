@@ -1,11 +1,13 @@
 package io.andronicus.forecastmvvm.weather.current
 
+import android.opengl.Visibility
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import io.andronicus.forecastmvvm.R
 import io.andronicus.forecastmvvm.data.network.ApixuWeatherApiService
@@ -47,8 +49,18 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             Observer {
                 if(it == null) return@Observer
 
-                text_view.text = it.toString()
+                group_loading.visibility = View.GONE
+                updateLocation("Nairobi")
+                updateDateToToday()
             })
         }
+    }
+
+    private fun updateLocation(location : String){
+        (activity as? AppCompatActivity)?.supportActionBar?.title = location
+    }
+
+    private fun updateDateToToday(){
+        (activity as? AppCompatActivity)?.supportActionBar?.subtitle = "Today"
     }
 }
