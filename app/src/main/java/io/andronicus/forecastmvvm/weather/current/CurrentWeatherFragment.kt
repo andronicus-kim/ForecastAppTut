@@ -63,4 +63,18 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
     private fun updateDateToToday(){
         (activity as? AppCompatActivity)?.supportActionBar?.subtitle = "Today"
     }
+
+    private fun updateTemperatures(temperature : Double, feelsLike : Double){
+        val unitAbbreviation = if(viewModel.isMetric) "°C" else "°F"
+        textView_temperature.text = "$temperature$unitAbbreviation"
+        textView_feels_like_temperature.text = "Feels like $feelsLike$unitAbbreviation"
+    }
+
+    private fun updateCondition(condition :String){
+        textView_condition.text = condition
+    }
+
+    private fun updatePrecipitation(precipitationVolume : Double){
+
+    }
 }
