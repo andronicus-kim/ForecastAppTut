@@ -1,9 +1,22 @@
 package io.andronicus.forecastmvvm.settings
 
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceFragmentCompat
+import io.andronicus.forecastmvvm.R
 
 /**
  * Created by Andronicus on 2/22/2019.
  */
-class SettingsFragment : Fragment() {
+class SettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.preferences)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as? AppCompatActivity)?.supportActionBar?.title = "Settings"
+        (activity as? AppCompatActivity)?.supportActionBar?.subtitle = ""
+    }
 }
