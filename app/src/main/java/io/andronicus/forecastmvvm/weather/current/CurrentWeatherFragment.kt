@@ -39,6 +39,7 @@ class CurrentWeatherFragment : Fragment(), KodeinAware {
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(CurrentWeatherViewModel::class.java)
         // TODO: Use the ViewModel
 
+
         val apiService = ApixuWeatherApiService(ConnectivityInterceptorImpl(this.context!!))
         val remoteDataSource = WeatherNetworkDataSourceImpl(apiService)
 
@@ -51,4 +52,7 @@ class CurrentWeatherFragment : Fragment(), KodeinAware {
         }
     }
 
+    private fun bindUI(){
+
+    }
 }
