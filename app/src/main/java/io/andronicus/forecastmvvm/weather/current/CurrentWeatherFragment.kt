@@ -13,6 +13,7 @@ import io.andronicus.forecastmvvm.R
 import io.andronicus.forecastmvvm.data.network.ApixuWeatherApiService
 import io.andronicus.forecastmvvm.data.network.ConnectivityInterceptorImpl
 import io.andronicus.forecastmvvm.data.network.WeatherNetworkDataSourceImpl
+import io.andronicus.forecastmvvm.internal.glide.GlideApp
 import io.andronicus.forecastmvvm.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +58,10 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
                 updatePrecipitation(it.precipitationVolume)
                 updateWind(it.windDirection, it.windSpeed)
                 updateVisibility(it.visibilityDistance)
+
+                GlideApp.with(this@CurrentWeatherFragment)
+                    .load("http:${it.conditionIconUrl}")
+                    .into(imageView_condition_icon)
 
             })
         }
