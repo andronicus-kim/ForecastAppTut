@@ -1,6 +1,7 @@
 package io.andronicus.forecastmvvm
 
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 import io.andronicus.forecastmvvm.data.db.ForecastDatabase
 import io.andronicus.forecastmvvm.data.network.*
 import io.andronicus.forecastmvvm.data.repository.ForecastRepository
@@ -27,4 +28,8 @@ class ForecastApplication : Application(),KodeinAware {
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        AndroidThreeTen.init(this@ForecastApplication)
+    }
 }
