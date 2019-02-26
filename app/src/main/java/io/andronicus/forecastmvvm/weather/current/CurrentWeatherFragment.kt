@@ -52,8 +52,18 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
                 group_loading.visibility = View.GONE
                 updateLocation("Nairobi")
                 updateDateToToday()
+                updateTemperatures(it.temperature,it.feelsLikeTemperature)
+                updateCondition(it.conditionText)
+                updatePrecipitation(it.precipitationVolume)
+                updateWind(it.windDirection, it.windSpeed)
+                updateVisibility(it.visibilityDistance)
+
             })
         }
+    }
+
+    private fun chooseLocalizedUnitAbbreviation(metric : String, imperial : String) : String{
+        return if(viewModel.isMetric) metric else imperial
     }
 
     private fun updateLocation(location : String){
@@ -65,7 +75,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
     }
 
     private fun updateTemperatures(temperature : Double, feelsLike : Double){
-        val unitAbbreviation = if(viewModel.isMetric) "°C" else "°F"
+        val unitAbbreviation = chooseLocalizedUnitAbbreviation("°C","°F")
         textView_temperature.text = "$temperature$unitAbbreviation"
         textView_feels_like_temperature.text = "Feels like $feelsLike$unitAbbreviation"
     }
@@ -74,7 +84,18 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         textView_condition.text = condition
     }
 
-    private fun updatePrecipitation(precipitationVolume : Double){
+    private fun updatePrecipitation(precipitationVolume: Double) {
+        val unitAbbreviation = chooseLocalizedUnitAbbreviation("mm", "in")
+        textView_precipitation.text = "Preciptiation: $precipitationVolume $unitAbbreviation"
+    }
 
+    private fun updateWind(windDirection: String, windSpeed: Double) {
+        val unitAbbreviation = chooseLocalizedUnitAbbreviation("kph", "mph")
+        textView_wind.text = "Wind: $windDirection, $windSpeed $unitAbbreviation"
+    }
+
+    private fun updateVisibility(visibilityDistance: Double) {
+        val unitAbbreviation = chooseLocalizedUnitAbbreviation("km", "mi.")
+        textView_visibility.text = "Visibility: $visibilityDistance $unitAbbreviation"
     }
 }
