@@ -23,13 +23,23 @@ class LocationProviderImpl(
 
     private val appContext = context.applicationContext
     override suspend fun hasLocationChanged(lastWeatherLocation: WeatherLocation): Boolean {
-        return hasDeviceLocationChanged(lastWeatherLocation) || hasCustomLocationChanged(lastWeatherLocation)
+        val deviceLocationChanged = try {
+            hasDeviceLocationChanged(lastWeatherLocation)
+        } catch (e: LocationPermissionNotGrantedException) {
+            false
+        }
+
+        return deviceLocationChanged || hasCustomLocationChanged(lastWeatherLocation)
     }
 
     private fun hasCustomLocationChanged(lastWeatherLocation: WeatherLocation): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val customLocationName = getCustomLocationName()
+        return customLocationName != lastWeatherLocation.name
     }
 
+    private fun getCustomLocationName(): String? {
+        return preferences.getString(CUSTOM_LOCATION, null)
+    }
     private suspend fun hasDeviceLocationChanged(lastWeatherLocation: WeatherLocation): Boolean {
         if (!isUsingDeviceLocation())
             return false
@@ -48,7 +58,17 @@ class LocationProviderImpl(
 
 
     override suspend fun getPreferredLocationString(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (isUsingDeviceLocation()) {
+            try {
+                val deviceLocation = getLastDeviceLocation().await()
+                    ?: return "${getCustomLocationName()}"
+                return "${deviceLocation.latitude},${deviceLocation.longitude}"
+            } catch (e: LocationPermissionNotGrantedException) {
+                return "${getCustomLocationName()}"
+            }
+        }
+        else
+            return "${getCustomLocationName()}"
     }
 
     @SuppressLint("MissingPermission")
