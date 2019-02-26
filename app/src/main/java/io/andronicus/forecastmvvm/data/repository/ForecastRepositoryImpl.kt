@@ -3,6 +3,8 @@ package io.andronicus.forecastmvvm.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import io.andronicus.forecastmvvm.data.db.CurrentWeatherDao
+import io.andronicus.forecastmvvm.data.db.WeatherLocationDao
+import io.andronicus.forecastmvvm.data.db.entity.WeatherLocation
 import io.andronicus.forecastmvvm.data.db.unitlocalized.UnitSpecificCurrentWeatherEntry
 import io.andronicus.forecastmvvm.data.network.WeatherNetworkDataSource
 import io.andronicus.forecastmvvm.data.network.response.CurrentWeatherResponse
@@ -15,6 +17,7 @@ import java.util.*
 
 class ForecastRepositoryImpl(
     private val currentWeatherDao : CurrentWeatherDao,
+    private val weatherLocationDao: WeatherLocationDao,
     private val weatherNetworkDataSource : WeatherNetworkDataSource
 ) : ForecastRepository {
 
@@ -32,14 +35,28 @@ class ForecastRepositoryImpl(
         }
     }
 
+    override suspend fun getWeatherLocation(): LiveData<WeatherLocation> {
+        return withContext(Dispatchers.IO){
+            return@withContext weatherLocationDao.getLocation()
+        }
+    }
+
     private fun persistFetchedCurrentWeather(fetchedWeather : CurrentWeatherResponse){
         GlobalScope.launch(Dispatchers.IO) {
             currentWeatherDao.upsert(fetchedWeather.currentWeatherEntry)
+            weatherLocationDao.upsert(fetchedWeather.location)
         }
     }
 
     private suspend fun iniWeatherData(){
-        if (isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
+        val lastWeatherLocation = weatherLocationDao.getLocation().value
+
+        if (lastWeatherLocation == null){
+            fetchCurrentWeather()
+            return
+        }
+
+        if (isFetchCurrentNeeded(lastWeatherLocation.zonedDateTime))
             fetchCurrentWeather()
     }
 

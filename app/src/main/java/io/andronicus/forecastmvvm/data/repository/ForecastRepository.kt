@@ -1,6 +1,7 @@
 package io.andronicus.forecastmvvm.data.repository
 
 import androidx.lifecycle.LiveData
+import io.andronicus.forecastmvvm.data.db.entity.WeatherLocation
 import io.andronicus.forecastmvvm.data.db.unitlocalized.UnitSpecificCurrentWeatherEntry
 
 /**
@@ -9,4 +10,5 @@ import io.andronicus.forecastmvvm.data.db.unitlocalized.UnitSpecificCurrentWeath
 interface ForecastRepository {
 
     suspend fun getCurrentWeather(metric : Boolean) : LiveData<out UnitSpecificCurrentWeatherEntry>
+    suspend fun getWeatherLocation() : LiveData<WeatherLocation>
 }
