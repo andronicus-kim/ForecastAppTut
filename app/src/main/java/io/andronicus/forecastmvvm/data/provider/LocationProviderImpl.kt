@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import io.andronicus.forecastmvvm.data.db.entity.WeatherLocation
 import io.andronicus.forecastmvvm.internal.LocationPermissionNotGrantedException
+import io.andronicus.forecastmvvm.internal.asDeferred
 import kotlinx.coroutines.Deferred
 
 
