@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -23,7 +24,7 @@ import java.security.Permissions
 
 
 private const val MY_PERMISSION_ACCESS_COARSE_LOCATION = 1
-class MainActivity : AppCompatActivity(), KodeinAware {
+class MainActivity : AppCompatActivity(), KodeinAware, LifecycleOwner {
 
     override val kodein by closestKodein()
     private val fusedLocationProviderClient : FusedLocationProviderClient by instance()
@@ -54,6 +55,11 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         }else{
             requestLocationPermission()
         }
+    }
+
+    private fun bindLocationManager() {
+        LifecycleBoundLocationManager(this@MainActivity,
+            fusedLocationProviderClient,locationCallback)
     }
 
     private fun hasLocationPermission(): Boolean {
