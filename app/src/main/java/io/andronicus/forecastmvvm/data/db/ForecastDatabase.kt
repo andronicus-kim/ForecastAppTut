@@ -5,11 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import io.andronicus.forecastmvvm.data.db.entity.CurrentWeatherEntry
+import io.andronicus.forecastmvvm.data.db.entity.WeatherLocation
 
 /**
  * Created by Andronicus on 2/25/2019.
  */
-@Database(entities = [CurrentWeatherEntry::class,WeatherLocationDao::class],version = 1,exportSchema = false)
+@Database(entities = [CurrentWeatherEntry::class, WeatherLocation::class],version = 1,exportSchema = false)
 abstract class ForecastDatabase : RoomDatabase() {
 
     abstract fun currentWeatherDao() : CurrentWeatherDao
